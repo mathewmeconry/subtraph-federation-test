@@ -1,0 +1,10 @@
+type Dao @entity @key(fields: "id") {
+  id: ID! # use address as id
+  subdomain: String
+  creator: Bytes!
+  createdAt: BigInt!
+    trustedForwarder: Bytes
+  signatureValidator: Bytes
+    daoURI: String
+  metadata: String
+}

@@ -1,0 +1,10 @@
+type Dao @entity @key(fields: "id") {
+  id: ID! # use address as id
+  multisigProposals: [Proposal!]! @derivedFrom(field: "dao")
+}
+
+type Proposal @entity  @key(fields: "id") {
+  id: ID!
+  dao: Dao
+  creator: Bytes!
+}

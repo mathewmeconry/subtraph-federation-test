@@ -1,0 +1,51 @@
+# Do not edit subgraph.yaml,this is a generated file. 
+# Instead, edit subgraph.placeholder.yaml and run: yarn manifest
+specVersion: 0.0.4
+description: A template for Aragon subgraphs
+repository: https://github.com/aragon/osx
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: PSP
+    network: matic
+    source:
+      abi: PluginSetupProcessor
+      address: '0x879D9dfe3F36d7684BeC1a2bB4Aa8E8871A7245B'
+      startBlock: 40817440
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Dao
+      abis:
+        - name: ERC165
+          file: ../Aragon/core/packages/contracts/artifacts/@openzeppelin/contracts/utils/introspection/ERC165.sol/ERC165.json
+        - name: PluginSetupProcessor
+          file: ../Aragon/core/packages/contracts/artifacts/src/framework/plugin/setup/PluginSetupProcessor.sol/PluginSetupProcessor.json
+      eventHandlers:
+        - event: InstallationApplied(indexed address,indexed address,bytes32,bytes32)
+          handler: handleInstallationApplied
+      file: ./src/psp.ts
+# templates
+templates:
+  # Multisig (package)
+  - name: Multisig
+    kind: ethereum/contract
+    network: matic
+    source:
+      abi: Multisig
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/multisig.ts
+      entities:
+        - Dao
+      abis:
+        - name: Multisig
+          file: ../Aragon/core/packages/contracts/artifacts/src/plugins/governance/multisig/Multisig.sol/Multisig.json
+      eventHandlers:
+        - event: ProposalCreated(indexed uint256,indexed address,uint64,uint64,bytes,(address,uint256,bytes)[],uint256)
+          handler: handleProposalCreated
